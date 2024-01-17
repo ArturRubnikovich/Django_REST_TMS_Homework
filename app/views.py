@@ -5,8 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib.postgres.aggregates import ArrayAgg
 
-from .forms import RecipeForm
-from .models import Recipe
+from .forms import RecipeForm, IngredientForm
+from .models import Recipe, Ingredient
 
 
 def home(request: WSGIRequest):
@@ -26,7 +26,7 @@ def home(request: WSGIRequest):
 
     print(recipes.query)
 
-    return render(request, 'home.html', {"recipes": recipes})
+    return render(request, "home.html", {"recipes": recipes})
 
 
 @login_required
@@ -43,7 +43,7 @@ def create_recipe(request: WSGIRequest):
 
             return HttpResponseRedirect("/")
 
-    return render(request, 'recipe-form.html', {'form': form})
+    return render(request, "recipe-form.html", {"form": form})
 
 
 @login_required
@@ -60,9 +60,26 @@ def update_recipe(request: WSGIRequest, recipe_id: int):
             recipe: Recipe = form.save()
             return HttpResponseRedirect(reverse("show-recipe", args=(recipe.id,)))
 
-    return render(request, 'recipe-form.html', {'form': form})
+    return render(request, "recipe-form.html", {"form": form})
 
 
 def show_recipe(request: WSGIRequest, recipe_id: int):
     recipe: Recipe = get_object_or_404(Recipe, id=recipe_id)
     return render(request, "recipe/recipe.html", {"recipe": recipe})
+
+
+@login_required
+def create_ingredient(request: WSGIRequest):
+    form = IngredientForm()
+
+    if request.method == 'POST':
+        form = IngredientForm(request.POST, request.FILES)  # Файлы находятся отдельно!
+        if form.is_valid():
+            ingredient: Ingredient = form.save(commit=False)  # Не сохранять в базу рецепт, а вернуть его объект.
+            ingredient.user = request.user
+            ingredient.save()  # Сохраняем в базу объект.
+            form.save_m2m()  # Сохраняем отношения many to many для ингредиентов и рецепта.
+
+            return HttpResponseRedirect("/")
+
+    return render(request, "ingredient-form.html", {"form": form})

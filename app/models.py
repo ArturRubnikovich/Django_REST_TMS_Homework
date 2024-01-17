@@ -4,7 +4,9 @@ from django.db import models
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name="Название ингредиента")
+    calories = models.FloatField(default=0, null=True, blank=True, verbose_name="Калорийность")
+    description = models.TextField(null=True, blank=True, verbose_name="Описание ингредиента")
 
     def __str__(self):
         return self.name
