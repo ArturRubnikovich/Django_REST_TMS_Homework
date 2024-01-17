@@ -12,7 +12,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
 class RecipeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ["name", "preview_image", "description", "created_at", "time_minutes", "ingredients", "category"]
+        fields = ["name", "preview_image", "description", "time_minutes", "ingredients", "category"]
 
 
 class RecipeDetailSerializer(serializers.ModelSerializer):
