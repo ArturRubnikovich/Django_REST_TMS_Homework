@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.contrib.postgres",
+    "django_filters",
     "crispy_forms",
     "crispy_bootstrap5",
     'users',
@@ -92,6 +93,13 @@ DATABASES = {
         "HOST": "127.0.0.1",  # IP адрес или домен СУБД.
         "PORT": 5432,
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    "PAGE_SIZE": 2,
 }
 
 # Password validation

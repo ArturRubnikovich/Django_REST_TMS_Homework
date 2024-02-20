@@ -14,6 +14,7 @@ django-ckeditor = "^6.7.0"
 django-crispy-forms = "^2.1"
 crispy-bootstrap5 = "^2023.10"
 djangorestframework = "^3.14.0"
+django-filter = "^23.5"
 
 
 [build-system]
